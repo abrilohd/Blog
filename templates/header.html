@@ -292,32 +292,32 @@
         }
 
         /* Enhanced Floating Animation */
-@keyframes modernFloat {
-    0% {
-        transform: translateY(0) rotate(0deg);
-        filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));
-    }
-    50% {
-        transform: translateY(-6px) rotate(1deg); /* Lifted higher with a tiny tilt */
-        filter: drop-shadow(0 10px 5px rgba(0,0,0,0.15)); /* Shadow grows as it lifts */
-    }
-    100% {
-        transform: translateY(0) rotate(0deg);
-        filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));
-    }
-}
+        @keyframes modernFloat {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));
+                }
+            50% {
+            transform: translateY(-6px) rotate(1deg); /* Lifted higher with a tiny tilt */
+            filter: drop-shadow(0 10px 5px rgba(0,0,0,0.15)); /* Shadow grows as it lifts */
+            }
+            100% {
+            transform: translateY(0) rotate(0deg);
+            filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));
+            }
+            }
 
-.navbar-brand-modern {
-    display: inline-block; /* Required for transform to work perfectly */
-    animation: modernFloat 5s ease-in-out infinite;
-    transition: animation-play-state 0.3s;
-}
+        .navbar-brand-modern {
+            display: inline-block; /* Required for transform to work perfectly */
+            animation: modernFloat 5s ease-in-out infinite;
+            transition: animation-play-state 0.3s;
+            }
 
-/* Interaction: Freeze and scale slightly when the user hovers */
-.navbar-brand-modern:hover {
-    animation-play-state: paused;
-    cursor: pointer;
-}
+        /* Interaction: Freeze and scale slightly when the user hovers */
+        .navbar-brand-modern:hover {
+            animation-play-state: paused;
+            cursor: pointer;
+            }
         
         /* Main content padding to account for fixed navbar */
         main {

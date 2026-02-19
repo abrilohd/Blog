@@ -23,14 +23,26 @@ MAIL_ADDRESS = os.environ.get("MY_EMAIL")
 MAIL_APP_PW = os.environ.get("MY_PASSWORD")
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
+
+app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
+
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
+    "DATABASE_URL",
+    "sqlite:///posts.db"
+)
+
 ckeditor = CKEditor(app)
 Bootstrap5(app)
 
-# Configure Flask-Login
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
+
+class Base(DeclarativeBase):
+    pass
+
+db = SQLAlchemy(model_class=Base)
+db.init_app(app)
 
 
 @login_manager.user_loader
@@ -91,13 +103,6 @@ def render_form(form, novalidate=False, button_map=None):
         parts.append(f'<button type="submit" class="{btn_class}">{submit_label}</button>')
         parts.append('</form>')
         return Markup('\n'.join(parts))
-
-# CREATE DATABASE
-class Base(DeclarativeBase):
-    pass
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///posts.db'
-db = SQLAlchemy(model_class=Base)
-db.init_app(app)
 
 
 # CONFIGURE TABLES
