@@ -191,17 +191,21 @@
                 </div>
                 {% endif %}
                 
-                <!-- Pager -->
                 <div class="pager-section">
-                    <a href="http://127.0.0.1:5001/post/1" class="pager-btn">
-                        <i class="fas fa-arrow-left me-2"></i>
-                        <span>Newer Posts</span>
-                    </a>
-                    <a href="http://127.0.0.1:5001/post/3" class="pager-btn">
-                        <span>Older Posts</span>
-                        <i class="fas fa-arrow-right ms-2"></i>
-                    </a>
-                </div>
+    {% if newer_post %}
+    <a href="{{ url_for('show_post', post_id=newer_post.id) }}" class="pager-btn">
+        <i class="fas fa-arrow-left me-2"></i>
+        <span>Newer Posts</span>
+    </a>
+    {% endif %}
+
+    {% if older_post %}
+    <a href="{{ url_for('show_post', post_id=older_post.id) }}" class="pager-btn">
+        <span>Older Posts</span>
+        <i class="fas fa-arrow-right ms-2"></i>
+    </a>
+    {% endif %}
+</div>
             </div>
         </div>
     </div>

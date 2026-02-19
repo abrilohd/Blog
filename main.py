@@ -154,16 +154,15 @@ with app.app_context():
     db.create_all()
 
 
-# Create an admin-only decorator
+# Admin-only decorator
 def admin_only(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-
-        # FIRST: check if user is logged in
+        # If user is not logged in, redirect to login page
         if not current_user.is_authenticated:
-            return abort(401)  # or redirect to login
+            return redirect(url_for("login"))
 
-        # SECOND: check if admin
+        # If user is logged in but not admin (id != 1), show 403
         if current_user.id != 1:
             return abort(403)
 
@@ -239,14 +238,15 @@ def get_all_posts():
     posts = result.scalars().all()
     return render_template("index.html", all_posts=posts, current_user=current_user)
 
-
-# Add a POST method to be able to post comments
 @app.route("/post/<int:post_id>", methods=["GET", "POST"])
 def show_post(post_id):
     requested_post = db.get_or_404(BlogPost, post_id)
-    # Add the CommentForm to the route
+
+    # Find newer and older posts
+    newer_post = BlogPost.query.filter(BlogPost.id > post_id).order_by(BlogPost.id.asc()).first()
+    older_post = BlogPost.query.filter(BlogPost.id < post_id).order_by(BlogPost.id.desc()).first()
+
     comment_form = CommentForm()
-    # Only allow logged-in users to comment on posts
     if comment_form.validate_on_submit():
         if not current_user.is_authenticated:
             flash("You need to login or register to comment.")
@@ -259,7 +259,16 @@ def show_post(post_id):
         )
         db.session.add(new_comment)
         db.session.commit()
-    return render_template("post.html", post=requested_post, current_user=current_user, form=comment_form)
+        return redirect(url_for("show_post", post_id=post_id))
+
+    return render_template(
+        "post.html",
+        post=requested_post,
+        current_user=current_user,
+        form=comment_form,
+        newer_post=newer_post,
+        older_post=older_post
+    )
 
 
 # Use a decorator so only an admin user can create new posts
@@ -283,8 +292,8 @@ def add_new_post():
     return render_template("make-post.html", form=form, current_user=current_user)
 
 
-# Use a decorator so only an admin user can edit a post
 @app.route("/edit-post/<int:post_id>", methods=["GET", "POST"])
+@admin_only  # add this
 def edit_post(post_id):
     post = db.get_or_404(BlogPost, post_id)
     edit_form = CreatePostForm(
@@ -305,7 +314,6 @@ def edit_post(post_id):
     return render_template("make-post.html", form=edit_form, is_edit=True, current_user=current_user)
 
 
-# Use a decorator so only an admin user can delete a post
 @app.route("/delete/<int:post_id>")
 @admin_only
 def delete_post(post_id):
@@ -324,18 +332,39 @@ def about():
 def contact():
     if request.method == "POST":
         data = request.form
-        send_email(data["name"], data["email"], data["phone"], data["message"])
+        send_email(
+            data["name"],
+            data["email"],
+            data["phone"],
+            data["message"]
+        )
         return render_template("contact.html", msg_sent=True)
+
     return render_template("contact.html", msg_sent=False)
 
+
 def send_email(name, email, phone, message):
-    email_message = f"Subject:New Message\n\nName: {name}\nEmail: {email}\nPhone: {phone}\nMessage:{message}"
-    # Added port 587 for standard Gmail SMTP reliability
+    email_message = f"""Subject: New Contact Message
+
+Name: {name}
+Email: {email}
+Phone: {phone}
+Message:
+{message}
+"""
+
     with smtplib.SMTP("smtp.gmail.com", 587) as connection:
         connection.starttls()
-        connection.login(MAIL_ADDRESS, MAIL_APP_PW)
-        # FIX: The second argument must be an EMAIL, not the password
-        connection.sendmail(MAIL_ADDRESS, MAIL_ADDRESS, email_message)
+        connection.login(
+            os.environ.get("MY_EMAIL"),
+            os.environ.get("MY_PASSWORD")
+        )
+        connection.sendmail(
+            os.environ.get("MY_EMAIL"),
+            os.environ.get("MY_EMAIL"),
+            email_message
+        )
+
 
 if __name__ == "__main__":
     app.run(debug=True, port=5001)
