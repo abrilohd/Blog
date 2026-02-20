@@ -1,44 +1,58 @@
+# Standard library imports
+import os
+import smtplib
+import hashlib
+from functools import wraps
 from datetime import date
 from flask import Flask, abort, render_template, redirect, url_for, flash, request
 from flask_bootstrap import Bootstrap5
 from flask_ckeditor import CKEditor
-import hashlib
-from markupsafe import Markup
 from flask_login import UserMixin, login_user, LoginManager, current_user, logout_user
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import relationship, DeclarativeBase, Mapped, mapped_column
-from sqlalchemy import Integer, String, Text
-from functools import wraps
-from werkzeug.security import generate_password_hash, check_password_hash
-from sqlalchemy.orm import relationship
-from forms import CreatePostForm, RegisterForm, LoginForm, CommentForm
-import smtplib
-import os
 
+# SQLAlchemy imports
+from sqlalchemy import Integer, String, Text
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+
+# Security
+from werkzeug.security import generate_password_hash, check_password_hash
+from markupsafe import Markup
+
+# Forms
+from forms import CreatePostForm, RegisterForm, LoginForm, CommentForm
+
+# Load environment variables
 from dotenv import load_dotenv
 load_dotenv()
 
+# Mail credentials
 MAIL_ADDRESS = os.environ.get("MY_EMAIL")
 MAIL_APP_PW = os.environ.get("MY_PASSWORD")
 
+# Flask app initialization
 app = Flask(__name__)
-
 app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
-database_url = os.environ.get("DATABASE_URL")
 
+# Database configuration
+database_url = os.environ.get("DATABASE_URL")
 if database_url:
+    # Fix for older Heroku-style DATABASE_URL
     database_url = database_url.replace("postgres://", "postgresql://", 1)
     app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 else:
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///posts.db'
-
+    
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# Initialize extensions
 ckeditor = CKEditor(app)
 Bootstrap5(app)
 
+# Flask-Login configuration
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
 
+# SQLAlchemy Base and database initialization
 class Base(DeclarativeBase):
     pass
 
@@ -154,7 +168,6 @@ class Comment(db.Model):
 with app.app_context():
     db.create_all()
 
-
 # Admin-only decorator
 def admin_only(f):
     @wraps(f)
@@ -170,6 +183,13 @@ def admin_only(f):
         return f(*args, **kwargs)
 
     return decorated_function
+
+
+@app.route('/')
+def get_all_posts():
+    result = db.session.execute(db.select(BlogPost))
+    posts = result.scalars().all()
+    return render_template("index.html", all_posts=posts, current_user=current_user)
 
 
 # Register new users into the User database
@@ -232,12 +252,6 @@ def logout():
     logout_user()
     return redirect(url_for('get_all_posts'))
 
-
-@app.route('/')
-def get_all_posts():
-    result = db.session.execute(db.select(BlogPost))
-    posts = result.scalars().all()
-    return render_template("index.html", all_posts=posts, current_user=current_user)
 
 @app.route("/post/<int:post_id>", methods=["GET", "POST"])
 def show_post(post_id):
@@ -368,4 +382,4 @@ Message:
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5001)
+    app.run(debug=True)
