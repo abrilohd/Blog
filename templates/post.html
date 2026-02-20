@@ -187,35 +187,172 @@
     
     /* Post Content */
     .post-content {
-        background: #f8fafc;
+        background: var(--bg-secondary);
         padding: 3rem 0;
+        min-height: 60vh;
     }
     
+    /* Post Body Styling - This is the key part */
     .post-body {
-        background: white;
+        background: var(--card-bg);
         border-radius: 30px;
         padding: 3rem;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 20px 40px var(--shadow-color);
         margin-bottom: 3rem;
         line-height: 1.8;
         font-size: 1.1rem;
-        color: #2d3748;
+        color: var(--text-primary);
+        border: 1px solid var(--card-border);
     }
     
-    .post-body h1, .post-body h2, .post-body h3 {
-        margin-top: 2rem;
-        margin-bottom: 1rem;
-        color: #1a202c;
+    /* Post body content styling */
+    .post-body h1 {
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin: 2rem 0 1rem;
+        color: var(--text-primary);
+        border-bottom: 2px solid var(--border-color);
+        padding-bottom: 0.5rem;
+    }
+    
+    .post-body h2 {
+        font-size: 1.8rem;
+        font-weight: 600;
+        margin: 1.8rem 0 1rem;
+        color: var(--text-primary);
+    }
+    
+    .post-body h3 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin: 1.5rem 0 1rem;
+        color: var(--text-primary);
+    }
+    
+    .post-body h4 {
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin: 1.3rem 0 0.8rem;
+        color: var(--text-primary);
     }
     
     .post-body p {
         margin-bottom: 1.5rem;
+        color: var(--text-secondary);
+        line-height: 1.8;
+    }
+    
+    .post-body strong {
+        color: var(--text-primary);
+        font-weight: 600;
+    }
+    
+    .post-body em {
+        font-style: italic;
+        color: var(--text-secondary);
+    }
+    
+    .post-body ul, .post-body ol {
+        margin: 1.5rem 0;
+        padding-left: 2rem;
+        color: var(--text-secondary);
+    }
+    
+    .post-body li {
+        margin-bottom: 0.5rem;
+        color: var(--text-secondary);
+    }
+    
+    .post-body li strong {
+        color: var(--text-primary);
+    }
+    
+    .post-body a {
+        color: #667eea;
+        text-decoration: none;
+        border-bottom: 1px dashed #667eea;
+    }
+    
+    .post-body a:hover {
+        color: #764ba2;
+        border-bottom: 1px solid #764ba2;
+    }
+    
+    .post-body blockquote {
+        border-left: 4px solid #667eea;
+        background: var(--bg-secondary);
+        padding: 1.5rem 2rem;
+        margin: 1.5rem 0;
+        border-radius: 0 20px 20px 0;
+        font-style: italic;
+        color: var(--text-secondary);
+    }
+    
+    .post-body blockquote p {
+        margin-bottom: 0;
+        color: var(--text-secondary);
+    }
+    
+    .post-body code {
+        background: var(--bg-secondary);
+        color: #e83e8c;
+        padding: 0.2rem 0.4rem;
+        border-radius: 6px;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9rem;
+        border: 1px solid var(--border-color);
+    }
+    
+    .post-body pre {
+        background: var(--bg-secondary);
+        color: var(--text-primary);
+        padding: 1.5rem;
+        border-radius: 15px;
+        overflow-x: auto;
+        margin: 1.5rem 0;
+        border: 1px solid var(--border-color);
+    }
+    
+    .post-body pre code {
+        background: none;
+        color: inherit;
+        padding: 0;
+        border: none;
+    }
+    
+    .post-body hr {
+        margin: 2rem 0;
+        border: 0;
+        height: 1px;
+        background: linear-gradient(to right, transparent, var(--border-color), transparent);
     }
     
     .post-body img {
         max-width: 100%;
+        height: auto;
         border-radius: 15px;
         margin: 2rem 0;
+        box-shadow: 0 10px 30px var(--shadow-color);
+    }
+    
+    .post-body table {
+        width: 100%;
+        margin: 1.5rem 0;
+        border-collapse: collapse;
+        color: var(--text-secondary);
+    }
+    
+    .post-body th {
+        background: var(--bg-secondary);
+        color: var(--text-primary);
+        font-weight: 600;
+        padding: 0.75rem;
+        border: 1px solid var(--border-color);
+    }
+    
+    .post-body td {
+        padding: 0.75rem;
+        border: 1px solid var(--border-color);
     }
     
     /* Edit Button */
@@ -240,26 +377,28 @@
     
     /* Comments Section */
     .comments-section {
-        background: white;
+        background: var(--card-bg);
         border-radius: 30px;
         padding: 2rem;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 20px 40px var(--shadow-color);
+        border: 1px solid var(--card-border);
     }
     
     .comments-title {
         font-size: 1.8rem;
         font-weight: 600;
-        color: #2d3748;
+        color: var(--text-primary);
         margin-bottom: 2rem;
         padding-bottom: 1rem;
-        border-bottom: 2px solid #e2e8f0;
+        border-bottom: 2px solid var(--border-color);
     }
     
     .comment-form-container {
         margin-bottom: 3rem;
         padding: 1.5rem;
-        background: #f8fafc;
+        background: var(--bg-secondary);
         border-radius: 20px;
+        border: 1px solid var(--border-color);
     }
     
     .comments-list {
@@ -272,14 +411,15 @@
         display: flex;
         gap: 1.5rem;
         padding: 1.5rem;
-        background: #f8fafc;
+        background: var(--bg-secondary);
         border-radius: 20px;
         transition: all 0.3s ease;
+        border: 1px solid var(--border-color);
     }
     
     .comment-card:hover {
         transform: translateX(5px);
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 5px 15px var(--shadow-color);
     }
     
     .comment-avatar {
@@ -290,8 +430,8 @@
         width: 50px;
         height: 50px;
         border-radius: 50%;
-        border: 3px solid white;
-        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        border: 3px solid var(--card-bg);
+        box-shadow: 0 3px 10px var(--shadow-color);
     }
     
     .comment-content {
@@ -310,19 +450,24 @@
     .comment-author {
         font-size: 1.1rem;
         font-weight: 600;
-        color: #2d3748;
+        color: var(--text-primary);
         margin: 0;
     }
     
     .comment-date {
         font-size: 0.85rem;
-        color: #718096;
+        color: var(--text-muted);
     }
     
     .comment-text {
-        color: #4a5568;
+        color: var(--text-secondary);
         line-height: 1.6;
         margin-bottom: 1rem;
+    }
+    
+    .comment-text p {
+        color: var(--text-secondary);
+        margin-bottom: 0.5rem;
     }
     
     .comment-actions {
@@ -336,7 +481,7 @@
         gap: 0.5rem;
         background: none;
         border: none;
-        color: #718096;
+        color: var(--text-muted);
         font-size: 0.9rem;
         padding: 0.3rem 0.8rem;
         border-radius: 20px;
@@ -345,7 +490,7 @@
     }
     
     .comment-action:hover {
-        background: #e2e8f0;
+        background: var(--hover-bg);
         color: #667eea;
     }
     
@@ -411,6 +556,19 @@
         
         .post-body {
             padding: 1.5rem;
+            font-size: 1rem;
+        }
+        
+        .post-body h1 {
+            font-size: 1.8rem;
+        }
+        
+        .post-body h2 {
+            font-size: 1.5rem;
+        }
+        
+        .post-body h3 {
+            font-size: 1.3rem;
         }
         
         .comment-card {
@@ -431,11 +589,16 @@
         
         .post-body {
             padding: 1rem;
-            font-size: 1rem;
+            border-radius: 20px;
         }
         
         .comments-section {
             padding: 1rem;
+        }
+        
+        .comment-header {
+            flex-direction: column;
+            align-items: flex-start;
         }
     }
 </style>
